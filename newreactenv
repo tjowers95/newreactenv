@@ -1,0 +1,39 @@
+#!/bin/bash
+npm init -y; mkdir -p src; touch src/index.html src/index.js;
+npm i react react-dom webpack webpack-merge webpack-cli @babel/core babel-loader @babel/preset-env @babel/preset-react compression-webpack-plugin html-webpack-plugin html-loader css-loader style-loader --save-dev;
+
+printf "\
+const HtmlWebPackPlugin = require('html-webpack-plugin');\n\
+const CompressionPlugin = require('compression-webpack-plugin');\n\
+module.exports = {\n\
+    devtool: 'source-map',\n\
+    module: {\n\
+        rules:[\n\
+            {\n\
+                test:/\.(js|jsx)$/,\n\
+                exclude: /node_modules/,\n\
+                use: {\n\
+                    loader: 'babel-loader'\n\
+                }\n\
+            },\n\
+            {\n\
+                test:/\.(html|htm)$/,\n\
+                use: [\n\
+                        {\n\
+                            loader: 'html-loader'\n\
+                        }\n\
+                ]\n\
+            }\n\
+        ]\n\
+    },\n\
+    plugins: [\n\
+        new HtmlWebPackPlugin({\n\
+            template: './src/index.html',\n\
+            filename: './index.html'\n\
+        }),\n\
+        new CompressionPlugin({})\n\
+    ]\n\
+};\n\
+" > ./webpack.config.js;
+
+printf "{ 'presets':['@babel/preset-env', '@babel/preset-react']  }" > src/.babelrc;
